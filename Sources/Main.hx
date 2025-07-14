@@ -8,6 +8,6 @@ class Main {
 			title: Settings.appName,
 			width: Settings.screenWidth,
 			height: Settings.screenHeight,
-		}, _ -> new Simulation().load());
+		}, _ -> new Simulation().start());
 	}
 }

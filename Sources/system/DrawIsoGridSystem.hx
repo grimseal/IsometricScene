@@ -43,9 +43,9 @@ class IsoGridPostProcess extends PostProcess {
 	public function new() {}
 
 	function prepare(framebuffer:Framebuffer, g:Graphics, pipeline:PipelineState) {
-		var matrix = Scene.current.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
+		var matrix = Scene.current.camera.getInverseProjectionMatrix();
 		var size = Scene.current.grid.size;
-		g.setMatrix(pipeline.getConstantLocation(VIEW_MATRIX_NAME), matrix.inverse());
+		g.setMatrix(pipeline.getConstantLocation(VIEW_MATRIX_NAME), matrix);
 		g.setVector2(pipeline.getConstantLocation(GRID_SIZE_NAME), new FastVector2(size.x, size.y));
 		g.setVector4(pipeline.getConstantLocation(IN_GRID_COLOR_NAME), IN_GRID_COLOR);
 		g.setVector4(pipeline.getConstantLocation(OUT_GRID_COLOR_NAME), OUT_GRID_COLOR);

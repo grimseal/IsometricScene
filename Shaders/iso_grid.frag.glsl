@@ -11,7 +11,7 @@ uniform vec4 outGridColor;
 
 const float cellWidth = 48.0;
 const float cellHeight = 24.0;
-const float lineThickness = 1.0 / cellWidth;
+const float lineThickness = 1.0 / cellHeight;
 const float toGridWidth = 1.0 / (cellWidth / 2);
 const float toGridHeight = 1.0 / (cellHeight / 2);
 
@@ -25,7 +25,7 @@ vec2 worldToGrid(vec2 worldPos) {
     return vec2(x, y);
 }
 
-float inGrid(vec2 gridPos, vec2 gridSize) {
+float inGrid(vec2 gridPos) {
     vec2 inside = step(vec2(0.0), gridPos) * step(gridPos, gridSize - vec2(1e-3));
     return inside.x * inside.y;
 }
@@ -33,10 +33,10 @@ float inGrid(vec2 gridPos, vec2 gridSize) {
 void main() {
     vec2 gridPos = worldToGrid(getWorldPos());
     vec2 distToLine = abs(fract(gridPos + 0.5) - 0.5);
-    float lineX = step(lineThickness, distToLine.x);
-    float lineY = step(lineThickness, distToLine.y);
+    float lineX = smoothstep(0.0, lineThickness, distToLine.x);
+    float lineY = smoothstep(0.0, lineThickness, distToLine.y);
     float gridLine = 1.0 - min(lineX, lineY);
-    float insideMask = inGrid(gridPos, gridSize);
+    float insideMask = inGrid(gridPos);
     vec3 baseColor = mix(outGridColor, inGridColor, insideMask).xyz;
     vec3 finalColor = baseColor * (.5 + gridLine * .5);
     FragColor = vec4(finalColor, 1);

@@ -2,13 +2,11 @@ package obj;
 
 import kha.FastFloat;
 import kha.math.FastVector2;
+import Settings;
 
 class Constants {
-	public static inline final TILE_WIDTH:FastFloat = 48;
-	public static inline final TILE_HEIGHT:FastFloat = 24;
-
-	public static inline final TILE_WIDTH_HALF:FastFloat = 24;
-	public static inline final TILE_HEIGHT_HALF:FastFloat = 12;
+	public static inline final TILE_WIDTH_HALF:FastFloat = Settings.CELL_WIDTH / 2.0;
+	public static inline final TILE_HEIGHT_HALF:FastFloat = Settings.CELL_HEIGHT / 2.0;
 
 	public static inline final TILE_WIDTH_HALF_RCP:FastFloat = 1.0 / TILE_WIDTH_HALF;
 	public static inline final TILE_HEIGHT_HALF_RCP:FastFloat = 1.0 / TILE_HEIGHT_HALF;

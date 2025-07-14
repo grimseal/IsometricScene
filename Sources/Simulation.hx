@@ -1,5 +1,6 @@
 package;
 
+import core.Screen;
 import kha.System;
 import kha.Scheduler;
 import kha.Assets;
@@ -10,11 +11,12 @@ import obj.Scene;
 class Simulation {
 	public function new() {}
 
-	public function load():Void {
+	public function start():Void {
 		Assets.loadEverything(init);
 	}
 
 	public function init():Void {
+		Screen.update();
 		Time.init();
 		core.System.load();
 		core.System.init();
@@ -29,6 +31,7 @@ class Simulation {
 	}
 
 	function render(frames:Array<Framebuffer>) {
+		Screen.update();
 		Time.update();
 		core.System.render(frames[0]);
 	}
