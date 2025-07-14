@@ -32,13 +32,13 @@ class CameraControlSystem implements ISystem {
 		final diff = origin.sub(position);
 		final zoom = Scene.current.camera.zoom;
 		final pos = cameraOrigin.add(new FastVector2(diff.x * zoom, diff.y * zoom));
-
-		Scene.current.camera.position = pos;
+		final clamped = clampScenePosition(pos);
+		Scene.current.camera.position = clamped;
 	}
 
-	public function clampScenePosition(pos:GridPos):WorldPos {
+	public function clampScenePosition(world:WorldPos):WorldPos {
 		final size = Scene.current.grid.size;
-		var pos = new GridPos(pos.x, pos.y);
+		var pos:GridPos = world.toGridPos();
 		if (pos.x < 0)
 			pos.x = 0;
 		if (pos.x > size.x)
@@ -47,7 +47,7 @@ class CameraControlSystem implements ISystem {
 			pos.y = 0;
 		if (pos.y > size.y)
 			pos.y = size.y;
-		return cast pos;
+		return pos.toWorldPos();
 	}
 
 	function onMouseDown(button:Int, x:Int, y:Int):Void {

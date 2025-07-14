@@ -25,7 +25,9 @@ class Scene {
 			return;
 		}
 
-		var cell:Cell = grid.getCellByPosition(obj.position);
+		var cell:Cell = grid.getCellByPosition(obj.gridPosition);
+		if (cell == null)
+			throw 'cell not found ${obj.gridPosition}';
 		if (cell.content != null)
 			throw "cell already has content, we need to remove the old object first";
 

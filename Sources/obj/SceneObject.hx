@@ -33,17 +33,17 @@ class SceneObject extends Entity {
 
 	public inline function update():Void {}
 
-	public inline function get_worldPosition():WorldPos
+	inline function get_worldPosition():WorldPos
 		return position;
 
-	public inline function set_worldPosition(value:WorldPos):WorldPos
+	inline function set_worldPosition(value:WorldPos):WorldPos
 		return position = value;
 
-	public inline function get_gridPosition():GridPos
-		return cast worldPosition;
+	inline function get_gridPosition():GridPos
+		return worldPosition.toGridPos();
 
-	public inline function set_gridPosition(value:GridPos):GridPos {
-		worldPosition = cast value;
+	inline function set_gridPosition(value:GridPos):GridPos {
+		worldPosition = value.toWorldPos();
 		return value;
 	}
 }

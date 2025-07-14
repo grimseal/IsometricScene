@@ -31,7 +31,7 @@ class ObjectsRenderSystem implements IRenderSystem {
 		renderer.begin(framebuffer, ctx, image);
 
 		for (object in Scene.current.objects) {
-			var pos = object.gridPosition.toWorldPos();
+			final pos = object.position;
 			renderer.draw(object.mesh, pos.x, pos.y, object.color);
 		}
 
