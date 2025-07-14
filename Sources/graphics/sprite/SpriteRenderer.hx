@@ -79,7 +79,7 @@ class SpriteRenderer {
 	}
 
 	public function begin(framebuffer:Framebuffer, graphics:Graphics, texture:Image) { // todo move pipeline here
-		projectionMatrix = Scene.current.camera.updateMatrix(framebuffer.width, framebuffer.height);
+		projectionMatrix = Scene.current.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
 		tex = texture;
 		g = graphics;
 		g.setPipeline(pipeline);

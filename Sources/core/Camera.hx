@@ -19,7 +19,7 @@ class Camera extends Entity {
 		matrix = FastMatrix4.identity();
 	}
 
-	public function updateMatrix(width:Int, height:Int):FastMatrix4 {
+	public function updateProjectionMatrix(width:Int, height:Int):FastMatrix4 {
 		var origin = position;
 
 		var halfWidth = width * 0.5 * zoom;

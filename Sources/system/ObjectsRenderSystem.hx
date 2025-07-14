@@ -28,7 +28,6 @@ class ObjectsRenderSystem implements IRenderSystem {
 		var ctx = framebuffer.g4;
 
 		ctx.begin();
-		ctx.clear(bgColor);
 		renderer.begin(framebuffer, ctx, image);
 
 		for (object in Scene.current.objects) {

@@ -1,14 +1,12 @@
 package graphics;
 
-import kha.math.FastMatrix4;
 import kha.Framebuffer;
 import kha.graphics4.*;
 import graphics.mesh.Mesh.MeshLayout;
 
 abstract class PostProcess {
-	static inline final PROJECTION_MATRIX_NAME:String = "projectionMatrix";
-	static inline final POSITION_NAME:String = "position";
-	static inline final UV_NAME:String = "uv";
+	static inline final POSITION_NAME:String = "vertexPosition";
+	static inline final UV_NAME:String = "vertexUV";
 	static inline final MAX_VERTICES:Int = 4;
 
 	static var initialized:Bool;
@@ -16,7 +14,7 @@ abstract class PostProcess {
 	static var vb:VertexBuffer;
 	static var ib:IndexBuffer;
 
-	var pipeline:PipelineState;
+	public var pipeline(default, null):PipelineState;
 
 	static function initInternal() {
 		if (initialized)
@@ -75,17 +73,16 @@ abstract class PostProcess {
 		pipeline.compile();
 	}
 
-	public final function draw(framebuffer:Framebuffer, projectionMatrix:FastMatrix4) {
+	public final function draw(framebuffer:Framebuffer) {
 		var g = framebuffer.g4;
 		g.begin();
 		g.setPipeline(pipeline);
 		g.setVertexBuffer(vb);
 		g.setIndexBuffer(ib);
-		g.setMatrix(pipeline.getConstantLocation(PROJECTION_MATRIX_NAME), projectionMatrix);
-		prepare(g);
+		prepare(framebuffer, g, pipeline);
 		g.drawIndexedVertices(0, 6);
 		g.end();
 	}
 
-	abstract function prepare(g:Graphics):Void;
+	abstract function prepare(framebuffer:Framebuffer, g:Graphics, pipeline:PipelineState):Void;
 }

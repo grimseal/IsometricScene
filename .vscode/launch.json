@@ -9,6 +9,7 @@
             "runtimeArgs": [
                 "--no-sandbox",
                 "--force-device-scale-factor=1",
+                // "--disable-frame-rate-limit",
                 "."
             ],
             "outFiles": [

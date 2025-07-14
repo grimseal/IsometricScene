@@ -1,25 +1,19 @@
 package system;
 
-import graphics.PostProcess;
+import kha.math.FastVector4;
+import kha.Color;
 import kha.Shaders;
 import kha.Framebuffer;
 import kha.graphics4.*;
+import kha.math.FastVector2;
 import core.System.IRenderSystem;
-import graphics.mesh.Mesh.MeshLayout;
+import graphics.PostProcess;
+import obj.Scene;
 
 using ext.FloatExt;
 using ext.ArrayExt;
 
 class DrawIsoGridSystem implements IRenderSystem {
-	static inline final POSITION_NAME:String = "vertexPosition";
-	static inline final UV_NAME:String = "vertexUV";
-	static inline final MAX_VERTICES:Int = 4;
-
-	var pipeline:PipelineState;
-	var vertexStructure:VertexStructure;
-	var vb:VertexBuffer;
-	var ib:IndexBuffer;
-
 	var postProcess:IsoGridPostProcess;
 
 	public function new() {}
@@ -33,18 +27,27 @@ class DrawIsoGridSystem implements IRenderSystem {
 	}
 
 	public function render(framebuffer:Framebuffer) {
-		var g = framebuffer.g4;
-		g.begin();
-
-		g.setPipeline(pipeline);
-
-		// g.drawRect(0, 0, framebuffer.width, framebuffer.height);
-		g.end();
+		postProcess.draw(framebuffer);
 	}
 }
 
 class IsoGridPostProcess extends PostProcess {
+	static inline final VIEW_MATRIX_NAME:String = "inverseProjectionMatrix";
+	static inline final GRID_SIZE_NAME:String = "gridSize";
+	static inline final IN_GRID_COLOR_NAME:String = "inGridColor";
+	static inline final OUT_GRID_COLOR_NAME:String = "outGridColor";
+
+	static final IN_GRID_COLOR:FastVector4 = new FastVector4(0, 1, 0, 1);
+	static final OUT_GRID_COLOR:FastVector4 = new FastVector4(0, 0, 1, 1);
+
 	public function new() {}
 
-	function prepare(g:Graphics) {}
+	function prepare(framebuffer:Framebuffer, g:Graphics, pipeline:PipelineState) {
+		var matrix = Scene.current.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
+		var size = Scene.current.grid.size;
+		g.setMatrix(pipeline.getConstantLocation(VIEW_MATRIX_NAME), matrix.inverse());
+		g.setVector2(pipeline.getConstantLocation(GRID_SIZE_NAME), new FastVector2(size.x, size.y));
+		g.setVector4(pipeline.getConstantLocation(IN_GRID_COLOR_NAME), IN_GRID_COLOR);
+		g.setVector4(pipeline.getConstantLocation(OUT_GRID_COLOR_NAME), OUT_GRID_COLOR);
+	}
 }
