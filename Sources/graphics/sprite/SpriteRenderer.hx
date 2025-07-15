@@ -46,7 +46,6 @@ class SpriteRenderer {
 	var vertShader:VertexShader;
 	var fragShader:FragmentShader;
 	var tex:Image;
-	var projectionMatrix:FastMatrix4;
 
 	var vb:VertexBuffer;
 	var vertices:Float32Array;
@@ -79,14 +78,13 @@ class SpriteRenderer {
 	}
 
 	public function begin(framebuffer:Framebuffer, graphics:Graphics, texture:Image) { // todo move pipeline here
-		projectionMatrix = Scene.current.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
 		tex = texture;
 		g = graphics;
 		g.setPipeline(pipeline);
 		g.setVertexBuffer(vb);
 		g.setIndexBuffer(ib);
 		g.setTexture(pipeline.getTextureUnit(TEXTURE_UNIT_NAME), tex);
-		g.setMatrix(pipeline.getConstantLocation(PROJECTION_MATRIX_NAME), projectionMatrix);
+		g.setMatrix(pipeline.getConstantLocation(PROJECTION_MATRIX_NAME), Scene.current.camera.getProjectionMatrix());
 		reset();
 	}
 

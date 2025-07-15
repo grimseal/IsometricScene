@@ -1,16 +1,11 @@
 package system;
 
-import obj.SceneObject;
-import obj.Scene;
 import kha.Image;
-import graphics.sprite.SpriteRenderer;
 import kha.Color;
 import kha.Assets;
-import kha.Framebuffer;
+import graphics.RenderPassData;
+import graphics.sprite.SpriteRenderer;
 import core.System.IRenderSystem;
-
-using ext.FloatExt;
-using ext.ArrayExt;
 
 class ObjectsRenderSystem implements IRenderSystem {
 	private static final bgColor:Color = kha.Color.fromBytes(0x26, 0, 0x4d);
@@ -25,13 +20,12 @@ class ObjectsRenderSystem implements IRenderSystem {
 		image = Assets.images.get("objects");
 	}
 
-	public function render(framebuffer:Framebuffer) {
-		final queryAABB = Scene.current.camera.getViewportAABB();
-		final objects = Scene.current.spatialGrid.query(queryAABB);
-		final ctx = framebuffer.g4;
+	public function render(data:RenderPassData) {
+		final objects = data.objects;
+		final g = data.framebuffer.g4;
 
-		ctx.begin();
-		renderer.begin(framebuffer, ctx, image);
+		g.begin();
+		renderer.begin(data.framebuffer, g, image);
 
 		for (object in objects) {
 			final pos = object.position;
@@ -40,6 +34,6 @@ class ObjectsRenderSystem implements IRenderSystem {
 
 		renderer.end();
 
-		ctx.end();
+		g.end();
 	}
 }

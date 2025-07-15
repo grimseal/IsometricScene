@@ -1,13 +1,13 @@
 package system;
 
-import kha.math.FastVector4;
-import kha.Color;
 import kha.Shaders;
 import kha.Framebuffer;
 import kha.graphics4.*;
 import kha.math.FastVector2;
+import kha.math.FastVector4;
 import core.System.IRenderSystem;
 import graphics.PostProcess;
+import graphics.RenderPassData;
 import obj.Scene;
 
 using ext.FloatExt;
@@ -26,8 +26,8 @@ class DrawIsoGridSystem implements IRenderSystem {
 		});
 	}
 
-	public function render(framebuffer:Framebuffer) {
-		postProcess.draw(framebuffer);
+	public function render(data:RenderPassData) {
+		postProcess.draw(data.framebuffer);
 	}
 }
 
@@ -43,6 +43,7 @@ class IsoGridPostProcess extends PostProcess {
 	public function new() {}
 
 	function prepare(framebuffer:Framebuffer, g:Graphics, pipeline:PipelineState) {
+		// todo replace with RenderPassData
 		var matrix = Scene.current.camera.getInverseProjectionMatrix();
 		var size = Scene.current.grid.size;
 		g.setMatrix(pipeline.getConstantLocation(VIEW_MATRIX_NAME), matrix);

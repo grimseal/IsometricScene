@@ -70,8 +70,7 @@ class SpatialGrid<T:GridObject> {
 		insert(obj);
 	}
 
-	public function query(area:AABB):Array<T> {
-		var result:Array<T> = [];
+	public function query(area:AABB, result:Array<T>):Array<T> {
 		visitedBuffer.clear();
 
 		var topLeft = toCell(area.minX, area.minY);

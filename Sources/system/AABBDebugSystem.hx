@@ -1,47 +1,29 @@
 package system;
 
-import core.AABB;
 import kha.Color;
 import kha.Framebuffer;
 import kha.math.FastMatrix3;
+import graphics.RenderPassData;
 import core.System;
 import core.Camera;
-import obj.Scene;
 
 class AABBDebugSystem implements IRenderSystem {
 	public function new() {}
 
 	public function init() {}
 
-	public function render(framebuffer:Framebuffer) {
-		final g = framebuffer.g2;
-		final camera = Scene.current.camera;
-		final queryAABB = camera.getViewportAABB(100);
-		final objects = Scene.current.spatialGrid.query(queryAABB);
-
+	public function render(data:RenderPassData) {
+		final g = data.framebuffer.g2;
 		g.begin(false);
-		g.pushTransformation(getTransformation(framebuffer, camera));
-		g.color = Color.Magenta;
-		g.drawRect(queryAABB.minX, queryAABB.minY, queryAABB.width, queryAABB.height, camera.zoom);
-
+		g.pushTransformation(getTransformation(data.framebuffer, data.camera));
 		g.color = Color.Yellow;
-		for (obj in objects) {
+		for (obj in data.objects) {
 			final aabb = obj.getAABB();
-			g.drawRect(aabb.minX, aabb.minY, aabb.width, aabb.height, camera.zoom);
+			g.drawRect(aabb.minX, aabb.minY, aabb.width, aabb.height, data.camera.zoom);
 		}
 		g.popTransformation();
+		g.color = Color.White;
 		g.end();
-	}
-
-	inline function getQueryAABB(framebuffer:Framebuffer, camera:Camera):AABB {
-		final margin = 50.0;
-		final halfWidth = (framebuffer.width * .5 - margin) * camera.zoom;
-		final halfHeight = (framebuffer.height * .5 - margin) * camera.zoom;
-
-		final x = camera.position.x;
-		final y = camera.position.y;
-
-		return new AABB(x - halfWidth, y - halfHeight, x + halfWidth, y + halfHeight);
 	}
 
 	inline function getTransformation(framebuffer:Framebuffer, camera:Camera):FastMatrix3 {

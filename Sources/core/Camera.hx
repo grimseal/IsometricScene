@@ -6,6 +6,7 @@ import kha.math.FastVector2;
 import kha.math.FastVector4;
 
 // TODO refactor matrix
+@:allow(core.System)
 class Camera extends Entity {
 	static inline final minZoom:FastFloat = 0.5;
 	static inline final maxZoom:FastFloat = 2.0;
@@ -68,7 +69,10 @@ class Camera extends Entity {
 		return m;
 	}
 
-	public function updateProjectionMatrix(width:Int, height:Int):FastMatrix4 {
+	public function getProjectionMatrix():FastMatrix4
+		return matrix;
+
+	function updateProjectionMatrix(width:Int, height:Int):FastMatrix4 {
 		var halfWidth = width * 0.5 * zoom;
 		var halfHeight = height * 0.5 * zoom;
 

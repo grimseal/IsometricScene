@@ -6,6 +6,7 @@ import kha.Assets;
 import kha.Framebuffer;
 import core.Time;
 import core.System.IRenderSystem;
+import graphics.RenderPassData;
 
 using ext.FloatExt;
 using ext.ArrayExt;
@@ -19,8 +20,8 @@ class DrawFpsSystem implements IRenderSystem {
 		font = Assets.fonts.get(Assets.fonts.names.first());
 	};
 
-	public function render(framebuffer:Framebuffer) {
-		drawStringWithShadow(framebuffer, Std.string((1 / Time.deltaTime).round()), 0, 0, font, 32);
+	public function render(data:RenderPassData) {
+		drawStringWithShadow(data.framebuffer, Std.string((1 / Time.deltaTime).round()), 0, 0, font, 32);
 	}
 
 	public function drawStringWithShadow(framebuffer:Framebuffer, str:String, x:Float, y:Float, font:Font, fontSize:Int, color:Color = kha.Color.White,
