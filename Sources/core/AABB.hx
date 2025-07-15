@@ -4,10 +4,27 @@ import kha.FastFloat;
 
 @:structInit
 class AABB {
-	public var minX(default, null):FastFloat;
-	public var minY(default, null):FastFloat;
-	public var maxX(default, null):FastFloat;
-	public var maxY(default, null):FastFloat;
+	public var minX:FastFloat;
+	public var minY:FastFloat;
+	public var maxX:FastFloat;
+	public var maxY:FastFloat;
+
+	public var centerX(get, never):FastFloat;
+	public var centerY(get, never):FastFloat;
+	public var width(get, never):FastFloat;
+	public var height(get, never):FastFloat;
+
+	inline function get_centerX():FastFloat
+		return (minX + maxX) * .5;
+
+	inline function get_centerY():FastFloat
+		return (minY + maxY) * .5;
+
+	inline function get_width():FastFloat
+		return maxX - minX;
+
+	inline function get_height():FastFloat
+		return maxY - minY;
 
 	public function new(minX:FastFloat, minY:FastFloat, maxX:FastFloat, maxY:FastFloat) {
 		this.minX = minX;
@@ -29,6 +46,10 @@ class AABB {
 		maxX += x;
 		minY += y;
 		maxY += y;
+	}
+
+	public static inline function empty():AABB {
+		return new AABB(0, 0, 0, 0);
 	}
 
 	public inline function toString():String {

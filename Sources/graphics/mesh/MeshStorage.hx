@@ -44,9 +44,16 @@ class MeshStorage {
 	}
 
 	public static inline function getAABB(mesh:Mesh):AABB {
-		var offset:Int = mesh.id * 4;
-		return new AABB(MeshStorage.aabb.getFloat32(offset), MeshStorage.aabb.getFloat32(offset + 1), MeshStorage.aabb.getFloat32(offset + 2),
-			MeshStorage.aabb.getFloat32(offset + 3));
+		return fillAABB(mesh, AABB.empty());
+	}
+
+	public static function fillAABB(mesh:Mesh, aabb:AABB):AABB {
+		var offset:Int = mesh.id * 16;
+		aabb.minX = MeshStorage.aabb.getFloat32(offset);
+		aabb.minY = MeshStorage.aabb.getFloat32(offset + 4);
+		aabb.maxX = MeshStorage.aabb.getFloat32(offset + 8);
+		aabb.maxY = MeshStorage.aabb.getFloat32(offset + 12);
+		return aabb;
 	}
 
 	public static function addMesh(name:String, layout:MeshLayout, indices:Uint32Array, vertices:Float32Array):Mesh {

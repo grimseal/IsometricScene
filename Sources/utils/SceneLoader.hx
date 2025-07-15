@@ -21,8 +21,8 @@ class SceneLoader {
 
 		for (object in sceneData.objects) {
 			var mesh = MeshStorage.getByName('${object.w}x${object.h}');
-			var object = new SceneObject(new Vector2i(object.w, object.h), new FastVector2(object.x, object.y), mesh, Color.White);
-			scene.addObj(object);
+			var sceneObject = new SceneObject(new Vector2i(object.w, object.h), new FastVector2(object.x, object.y), mesh, Color.White);
+			scene.addObj(sceneObject);
 		}
 
 		scene.camera = new Camera();

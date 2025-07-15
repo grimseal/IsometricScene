@@ -1,5 +1,6 @@
 package graphics.mesh;
 
+import core.AABB;
 import kha.graphics5_.VertexData;
 import kha.graphics4.VertexStructure;
 import kha.arrays.Float32Array;
@@ -84,6 +85,14 @@ abstract Mesh(Int) {
 
 	inline function get_name():String {
 		return MeshStorage.names[this];
+	}
+
+	public inline function getAABB():AABB {
+		return MeshStorage.getAABB(this);
+	}
+
+	public inline function fillAABB(aabb:AABB):AABB {
+		return MeshStorage.fillAABB(this, aabb);
 	}
 
 	@:from public static inline function toMesh(int:Int):Mesh

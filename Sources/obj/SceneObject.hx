@@ -3,6 +3,7 @@ package obj;
 import kha.Color;
 import kha.math.Vector2i;
 import graphics.mesh.Mesh;
+import core.AABB;
 import core.Entity;
 import obj.Coords;
 
@@ -23,12 +24,17 @@ class SceneObject extends Entity {
 	public var mesh(default, null):Mesh;
 	public var color(default, null):Color;
 
+	var aabb:AABB;
+
 	public function new(size:Vector2i, position:GridPos, mesh:Mesh, color:Color) {
 		this.type = size.x == 0 && size.y == 0 ? SceneObjectType.NONBLOCKING : SceneObjectType.BLOCKING;
 		this.size = size;
 		this.mesh = mesh;
 		this.color = color;
 		this.gridPosition = position;
+
+		this.aabb = mesh.getAABB();
+		this.aabb.translate(worldPosition.x, worldPosition.y);
 	}
 
 	public inline function update():Void {}
@@ -46,4 +52,7 @@ class SceneObject extends Entity {
 		worldPosition = value.toWorldPos();
 		return value;
 	}
+
+	public function getAABB():AABB
+		return aabb;
 }
