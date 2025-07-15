@@ -1,33 +1,29 @@
 package core;
 
-class HashSet<T> {
-	var map:haxe.ds.IntMap<T>;
+abstract HashSet<T>(haxe.ds.IntMap<T>) {
+	public inline function new()
+		this = new haxe.ds.IntMap<T>();
 
-	public function new() {
-		map = new haxe.ds.IntMap<T>();
-	}
+	public inline function add(value:T):Void
+		this.set(getHash(value), value);
 
-	public function add(value:T):Void {
-		map.set(getHash(value), value);
-	}
+	public inline function remove(value:T):Bool
+		return this.remove(getHash(value));
 
-	public function remove(value:T):Void {
-		map.remove(getHash(value));
-	}
+	public inline function contains(value:T):Bool
+		return this.exists(getHash(value));
 
-	public function contains(value:T):Bool {
-		return map.exists(getHash(value));
-	}
+	public inline function clear():Void
+		this.clear();
 
 	public function toArray():Array<T> {
 		var result = [];
-		for (key in map.keys()) {
-			result.push(map.get(key));
+		for (key in this.keys()) {
+			result.push(this.get(key));
 		}
 		return result;
 	}
 
-	inline function getHash(v:T):Int {
+	inline function getHash(v:T):Int
 		return cast v;
-	}
 }

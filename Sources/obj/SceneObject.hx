@@ -13,7 +13,7 @@ enum abstract SceneObjectType(Int) from Int to Int {
 }
 
 class SceneObject extends Entity {
-	public var id(default, never):Int;
+	public var id(default, null):Int;
 
 	public var type(default, null):SceneObjectType;
 	public var size(default, null):Vector2i;
@@ -26,7 +26,8 @@ class SceneObject extends Entity {
 
 	var aabb:AABB;
 
-	public function new(size:Vector2i, position:GridPos, mesh:Mesh, color:Color) {
+	public function new(id:Int, size:Vector2i, position:GridPos, mesh:Mesh, color:Color) {
+		this.id = id;
 		this.type = size.x == 0 && size.y == 0 ? SceneObjectType.NONBLOCKING : SceneObjectType.BLOCKING;
 		this.size = size;
 		this.mesh = mesh;

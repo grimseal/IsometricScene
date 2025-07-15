@@ -6,11 +6,13 @@ import haxe.ds.IntMap;
 
 typedef GridObject = IdObject & AABBObject;
 
-class SpatialGrid {
+class SpatialGrid<T:GridObject> {
 	public var cellSize:Int;
 
-	var grid:IntMap<Array<GridObject>>;
+	var grid:IntMap<Array<T>>;
 	var objectCells:IntMap<Array<Int>>;
+
+	var visitedBuffer:HashSet<Int> = new HashSet<Int>();
 
 	public function new(cellSize:Int) {
 		this.cellSize = cellSize;
@@ -29,7 +31,7 @@ class SpatialGrid {
 		return (cy << 16) | (cx & 0xFFFF);
 	}
 
-	public function insert(obj:GridObject):Void {
+	public function insert(obj:T):Void {
 		var aabb = obj.getAABB();
 		var topLeft = toCell(aabb.minX, aabb.minY);
 		var bottomRight = toCell(aabb.maxX, aabb.maxY);
@@ -49,7 +51,7 @@ class SpatialGrid {
 		objectCells.set(obj.id, keys);
 	}
 
-	public function remove(obj:GridObject):Void {
+	public function remove(obj:T):Void {
 		if (!objectCells.exists(obj.id))
 			return;
 
@@ -63,14 +65,14 @@ class SpatialGrid {
 		objectCells.remove(obj.id);
 	}
 
-	public function update(obj:GridObject):Void {
+	public function update(obj:T):Void {
 		remove(obj);
 		insert(obj);
 	}
 
-	public function query(area:AABB):Array<GridObject> {
-		var result:Array<GridObject> = [];
-		var visited = new HashSet<Int>();
+	public function query(area:AABB):Array<T> {
+		var result:Array<T> = [];
+		visitedBuffer.clear();
 
 		var topLeft = toCell(area.minX, area.minY);
 		var bottomRight = toCell(area.maxX, area.maxY);
@@ -78,15 +80,13 @@ class SpatialGrid {
 		for (cy in topLeft.cy...bottomRight.cy + 1)
 			for (cx in topLeft.cx...bottomRight.cx + 1) {
 				var key = cellKey(cx, cy);
-				if (grid.exists(key)) {
-					for (obj in grid.get(key)) {
-						if (!visited.contains(obj.id)) {
-							if (obj.getAABB().intersects(area)) {
-								result.push(obj);
-								visited.add(obj.id);
-							}
-						}
-					}
+				if (!grid.exists(key))
+					continue;
+				for (obj in grid.get(key)) {
+					if (visitedBuffer.contains(obj.id) || !obj.getAABB().intersects(area))
+						continue;
+					result.push(obj);
+					visitedBuffer.add(obj.id);
 				}
 			}
 
@@ -94,9 +94,8 @@ class SpatialGrid {
 	}
 
 	public function clear():Void {
-		for (bucket in grid) {
+		for (bucket in grid)
 			bucket.resize(0);
-		}
 		grid.clear();
 		objectCells.clear();
 	}

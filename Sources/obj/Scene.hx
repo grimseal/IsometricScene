@@ -1,5 +1,6 @@
 package obj;
 
+import core.SpatialGrid;
 import core.Camera;
 import obj.SceneObject;
 import obj.Cell;
@@ -11,8 +12,11 @@ class Scene {
 	public var camera:Camera;
 	public var grid:Grid;
 
+	public var spatialGrid:SpatialGrid<SceneObject>;
+
 	public function new(grid:Grid) {
 		this.grid = grid;
+		spatialGrid = new SpatialGrid(100);
 		objects = [];
 	}
 
@@ -22,6 +26,7 @@ class Scene {
 
 		if (obj.type == SceneObjectType.NONBLOCKING) {
 			objects.push(obj);
+			spatialGrid.insert(obj);
 			return;
 		}
 
@@ -33,6 +38,7 @@ class Scene {
 
 		cell.content = obj;
 		objects.push(obj);
+		spatialGrid.insert(obj);
 	}
 
 	public function update():Void {
@@ -41,8 +47,14 @@ class Scene {
 	}
 
 	public function removeObj(obj:SceneObject):Void {
-		objects.remove(obj);
+		if (!objects.remove(obj))
+			return;
+		spatialGrid.remove(obj);
+		if (obj.type == SceneObjectType.NONBLOCKING)
+			return;
 		var cell:Cell = grid.getCellByPosition(obj.position);
+		if (cell == null)
+			throw 'cell not found ${obj.gridPosition}';
 		if (cell.content == obj)
 			cell.content = null;
 	}

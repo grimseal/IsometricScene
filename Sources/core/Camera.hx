@@ -93,4 +93,10 @@ class Camera extends Entity {
 
 		return matrix;
 	}
+
+	public function getViewportAABB(margin:FastFloat = 0):AABB {
+		final halfWidth = (Screen.size.x * .5 - margin) * zoom;
+		final halfHeight = (Screen.size.y * .5 - margin) * zoom;
+		return new AABB(position.x - halfWidth, position.y - halfHeight, position.x + halfWidth, position.y + halfHeight);
+	}
 }

@@ -7,7 +7,7 @@ class SimulationSystems {
 	static var renderSystems:Array<core.System.IRenderSystem> = [
 		new DrawIsoGridSystem(),
 		new ObjectsRenderSystem(),
-		new AABBDebugSystem(),
+		// new AABBDebugSystem(),
 		new DrawFpsSystem()
 	];
 }

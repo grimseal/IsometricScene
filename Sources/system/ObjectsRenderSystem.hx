@@ -1,5 +1,6 @@
 package system;
 
+import obj.SceneObject;
 import obj.Scene;
 import kha.Image;
 import graphics.sprite.SpriteRenderer;
@@ -25,12 +26,14 @@ class ObjectsRenderSystem implements IRenderSystem {
 	}
 
 	public function render(framebuffer:Framebuffer) {
-		var ctx = framebuffer.g4;
+		final queryAABB = Scene.current.camera.getViewportAABB();
+		final objects = Scene.current.spatialGrid.query(queryAABB);
+		final ctx = framebuffer.g4;
 
 		ctx.begin();
 		renderer.begin(framebuffer, ctx, image);
 
-		for (object in Scene.current.objects) {
+		for (object in objects) {
 			final pos = object.position;
 			renderer.draw(object.mesh, pos.x, pos.y, object.color);
 		}
