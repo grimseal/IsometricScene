@@ -7,7 +7,7 @@ class BlockedByZoneRule implements IVisibilityRule {
 	public function new() {}
 
 	public function apply(cell:Cell, grid:IsoGrid):Bool {
-		if (cell.state.has(CellState.Blocked))
+		if (cell.state.has(CellState.Locked))
 			return true;
 		return false;
 	}

@@ -4,10 +4,12 @@ in vec2 screenUV;
 in vec2 ndc;
 out vec4 FragColor;
 
+uniform sampler2D lockMaskTex;
 uniform mat4 inverseProjectionMatrix;
 uniform vec2 gridSize;
 uniform vec4 inGridColor;
 uniform vec4 outGridColor;
+uniform vec4 lockGridColor;
 
 const float cellWidth = 48.0;
 const float cellHeight = 24.0;
@@ -37,7 +39,9 @@ void main() {
     float lineY = smoothstep(0.0, lineThickness, distToLine.y);
     float gridLine = 1.0 - min(lineX, lineY);
     float insideMask = inGrid(gridPos);
-    vec3 baseColor = mix(outGridColor, inGridColor, insideMask).xyz;
+    ivec2 texelCoord = ivec2(floor(gridPos));
+    float lockMask = texelFetch(lockMaskTex, texelCoord, 0).r;
+    vec3 baseColor = mix(outGridColor, mix(inGridColor, lockGridColor, lockMask), insideMask).xyz;
     vec3 finalColor = baseColor * (.5 + gridLine * .5);
     FragColor = vec4(finalColor, 1);
 }

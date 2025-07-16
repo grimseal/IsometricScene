@@ -1,7 +1,6 @@
 package obj;
 
 import obj.Cell.CellState;
-import kha.audio2.ogg.vorbis.data.Setting;
 import kha.math.FastVector2;
 import kha.Color;
 import kha.math.Vector2i;
@@ -90,12 +89,14 @@ class SceneObject extends Entity {
 		return aabb;
 
 	public function applyVisibilityState(state:CellState) {
-		color = switch (state) {
-			case CellState.Invisible: Settings.INVISIBLE_COLOR;
-			case CellState.Semivisible: Settings.SEMIVISIBLE_COLOR;
-			case CellState.Blocked: Settings.BLOCKED_COLOR;
-			default: Settings.VISIBLE_COLOR;
-		}
+		if (state.has(CellState.Locked))
+			color = Settings.LOCKED_COLOR;
+		else if (state.has(CellState.Visible))
+			color = Settings.VISIBLE_COLOR;
+		else if (state.has(CellState.Semivisible))
+			color = Settings.SEMIVISIBLE_COLOR;
+		else
+			color = Settings.INVISIBLE_COLOR;
 	}
 
 	var prevCell:Cell;

@@ -16,7 +16,13 @@ class SceneLoader {
 	public function load(data:Blob):Scene {
 		var sceneData = parse(data);
 		var size = new Vector2i(sceneData.width, sceneData.height);
-		var grid = new IsoGrid(size);
+		var locked = new Array<IsoAABB>();
+
+		var i = 0;
+		for (lock in sceneData.lock_zones)
+			locked.push(new IsoAABB(i++, lock.x, lock.y, lock.w, lock.h));
+		var grid = new IsoGrid(size, locked);
+
 		var scene = new Scene(grid, new Vector2i(sceneData.visibility_source.x, sceneData.visibility_source.y));
 
 		for (object in sceneData.objects) {

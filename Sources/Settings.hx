@@ -24,5 +24,5 @@ class Settings {
 	public static inline final VISIBLE_COLOR:Color = 0xffffffff;
 	public static inline final SEMIVISIBLE_COLOR:Color = 0xff77a7ff;
 	public static inline final INVISIBLE_COLOR:Color = 0xff7a7a7a;
-	public static inline final BLOCKED_COLOR:Color = 0xffff8383;
+	public static inline final LOCKED_COLOR:Color = 0xffff8383;
 }

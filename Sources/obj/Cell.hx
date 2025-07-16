@@ -1,7 +1,6 @@
 package obj;
 
 import kha.math.Vector2i;
-import obj.Coords;
 
 class Cell {
 	public var state:CellState;
@@ -16,6 +15,7 @@ class Cell {
 	public function new(id:Int, position:Vector2i) {
 		this.id = id;
 		this.position = position;
+		this.state = CellState.Empty;
 	}
 
 	inline function get_content():SceneObject
@@ -41,7 +41,7 @@ enum abstract CellState(Int) from Int to Int {
 	var Visible = 0x02;
 	var Semivisible = 0x04;
 	var Invisible = 0x08;
-	var Blocked = 0x10;
+	var Locked = 0x10;
 
 	public inline function has(flag:CellState):Bool {
 		return (this & cast flag) != 0;
@@ -88,20 +88,8 @@ enum abstract CellState(Int) from Int to Int {
 			parts.push("Semivisible");
 		if (has(Invisible))
 			parts.push("Invisible");
-		if (has(Blocked))
-			parts.push("Blocked");
+		if (has(Locked))
+			parts.push("Locked");
 		return parts.join(" | ");
 	}
-}
-
-enum abstract CellOccupation(Int) from Int to Int {
-	var Empty = 0;
-	var Occupied = 1;
-}
-
-enum abstract CellVisibility(Int) from Int to Int {
-	var None = 0;
-	var Visible = 1;
-	var SemiVisible = 2;
-	var Invisible = 3;
 }

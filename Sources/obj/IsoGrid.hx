@@ -12,24 +12,28 @@ class IsoGrid {
 	public final size:Vector2i;
 	public final sortManager:IsoSortManager;
 	public final depthMap:IsoDepthMap;
+	public final locked:Array<IsoAABB>;
 
 	final cells:Array<Cell>;
 	final visited:Map<Int, Bool>;
 	final queue:List<Cell>;
 	final queue2:List<Cell>;
 
-	public function new(size:Vector2i) {
+	public function new(size:Vector2i, locked:Array<IsoAABB>) {
 		this.size = size;
-		depthMap = new IsoDepthMap(size.x, size.y);
-		sortManager = new IsoSortManager();
-		cells = new Array<Cell>();
-		visited = new Map<Int, Bool>();
-		queue = new List<Cell>();
-		queue2 = new List<Cell>();
+		this.depthMap = new IsoDepthMap(size.x, size.y);
+		this.sortManager = new IsoSortManager();
+		this.cells = new Array<Cell>();
+		this.locked = locked;
+		this.visited = new Map<Int, Bool>();
+		this.queue = new List<Cell>();
+		this.queue2 = new List<Cell>();
 		var index = 0;
 		for (y in 0...size.y)
 			for (x in 0...size.x)
 				cells.push(new Cell(index++, new Vector2i(x, y)));
+		for (lock in locked)
+			setCellsLocked(lock);
 	}
 
 	public inline function setCellsContent(obj:SceneObject):Void
@@ -44,6 +48,15 @@ class IsoGrid {
 			for (x in rect.xMin...rect.xMax)
 				if (contains(x, y))
 					getCellByCoords(x, y).content = content;
+	}
+
+	function setCellsLocked(rect:IsoAABB):Void {
+		for (y in rect.yMin...rect.yMax)
+			for (x in rect.xMin...rect.xMax)
+				if (contains(x, y)) {
+					final cell = getCellByCoords(x, y);
+					cell.state = cell.state.add(CellState.Locked);
+				}
 	}
 
 	public function contains(x:Int, y:Int):Bool {
