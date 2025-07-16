@@ -1,5 +1,6 @@
 package system;
 
+import obj.Cell;
 import kha.audio2.ogg.vorbis.data.Setting;
 import core.Time;
 import kha.FastFloat;
@@ -19,6 +20,7 @@ class MoveSystem implements ISystem {
 	static inline final MAX_MOVING_COUNT:Int = Settings.MAX_MOVING_OBJECT_COUNT;
 	static inline final MIN_MOVING_DURATION:FastFloat = Settings.MIN_MOVING_DURATION;
 	static inline final MAX_MOVING_DURATION:FastFloat = Settings.MAX_MOVING_DURATION;
+	static inline final CANDIDATES_UPDATE_INTERVAL:FastFloat = 1.0;
 
 	var movingObjects:Array<Move> = [];
 	var movingCounters:Map<Int, Int> = new haxe.ds.Map<Int, Int>();
@@ -26,6 +28,8 @@ class MoveSystem implements ISystem {
 	var mapWidth:Float;
 	var mapHeight:Float;
 	var random:Random;
+	var candidateUpdateTimer:FastFloat = 0.0;
+	var cachedCandidates:Array<SceneObject> = [];
 
 	public function new() {}
 
@@ -40,11 +44,8 @@ class MoveSystem implements ISystem {
 		final size = Scene.current.grid.size;
 		final width:FastFloat = size.x;
 		final height:FastFloat = size.y;
-		var allObjects = Scene.current.pointObjects;
-
-		var candidates = allObjects.copy();
-		candidates.sort(function(a, b) return getMovingCount(a.id) - getMovingCount(b.id));
-		var range:Int = Std.int(Math.min(MAX_MOVING_COUNT - movingObjects.length, candidates.length));
+		final candidates = updateCandidatesIfNeeded(deltaTime);
+		final range:Int = Std.int(Math.min(MAX_MOVING_COUNT - movingObjects.length, candidates.length));
 
 		for (i in 0...range) {
 			var obj = candidates[i];
@@ -59,6 +60,21 @@ class MoveSystem implements ISystem {
 		}
 
 		movingObjects = movingObjects.filter(o -> o.state != MoveState.Finished);
+	}
+
+	inline function updateCandidatesIfNeeded(deltaTime:FastFloat):Array<SceneObject> {
+		candidateUpdateTimer += deltaTime;
+
+		if (candidateUpdateTimer >= CANDIDATES_UPDATE_INTERVAL) {
+			candidateUpdateTimer = 0;
+
+			final allObjects = Scene.current.pointObjects;
+			final grid = Scene.current.grid;
+			cachedCandidates = allObjects.filter(a -> grid.getCellByPosition(a.gridPosition).state.has(CellState.Visible));
+			cachedCandidates.sort((a, b) -> getMovingCount(a.id) - getMovingCount(b.id));
+		}
+
+		return cachedCandidates;
 	}
 
 	inline function getRandomTarget(origin:FastVector2, width:FastFloat, height:FastFloat):FastVector2 {
