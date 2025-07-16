@@ -176,7 +176,7 @@
             <key type="filename">objects/0x0.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.52,0.91453</point_f>
+                <point_f>0.48,0.91453</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -191,7 +191,7 @@
             <key type="filename">objects/12x12.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.502582,0.248718</point_f>
+                <point_f>0.500861,0.251282</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -206,7 +206,7 @@
             <key type="filename">objects/1x1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.490566,0.806452</point_f>
+                <point_f>0.490566,0.790323</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -221,7 +221,7 @@
             <key type="filename">objects/1x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.666667,0.742647</point_f>
+                <point_f>0.666667,0.727941</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -236,7 +236,7 @@
             <key type="filename">objects/24x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.25097,0.2</point_f>
+                <point_f>0.249677,0.202062</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -251,7 +251,7 @@
             <key type="filename">objects/2x1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.347222,0.742647</point_f>
+                <point_f>0.333333,0.720588</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -266,7 +266,7 @@
             <key type="filename">objects/2x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.49505,0.677852</point_f>
+                <point_f>0.49505,0.657718</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -281,7 +281,7 @@
             <key type="filename">objects/2x3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.608,0.6375</point_f>
+                <point_f>0.6,0.6125</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -296,7 +296,7 @@
             <key type="filename">objects/2x4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.657718,0.606936</point_f>
+                <point_f>0.66443,0.566474</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -311,7 +311,7 @@
             <key type="filename">objects/2x6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.762887,0.525253</point_f>
+                <point_f>0.737113,0.494949</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -326,7 +326,7 @@
             <key type="filename">objects/2x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.795082,0.454545</point_f>
+                <point_f>0.790984,0.445455</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -341,7 +341,7 @@
             <key type="filename">objects/3x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.368,0.64375</point_f>
+                <point_f>0.4,0.6125</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -356,7 +356,7 @@
             <key type="filename">objects/3x3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.496644,0.595376</point_f>
+                <point_f>0.496644,0.566474</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -371,7 +371,7 @@
             <key type="filename">objects/3x4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.583815,0.567568</point_f>
+                <point_f>0.572254,0.52973</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -386,7 +386,7 @@
             <key type="filename">objects/3x5.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.641026,0.502538</point_f>
+                <point_f>0.625641,0.497462</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -401,7 +401,7 @@
             <key type="filename">objects/3x6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.680365,0.471154</point_f>
+                <point_f>0.657534,0.471154</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -416,7 +416,7 @@
             <key type="filename">objects/3x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.723881,0.427966</point_f>
+                <point_f>0.720149,0.415254</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -431,7 +431,7 @@
             <key type="filename">objects/4x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.315436,0.589595</point_f>
+                <point_f>0.33557,0.566474</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -446,7 +446,7 @@
             <key type="filename">objects/4x3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.427746,0.535135</point_f>
+                <point_f>0.427746,0.52973</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -476,7 +476,7 @@
             <key type="filename">objects/4x6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.610656,0.431818</point_f>
+                <point_f>0.598361,0.445455</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -491,7 +491,7 @@
             <key type="filename">objects/4x7.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.654135,0.407725</point_f>
+                <point_f>0.635338,0.420601</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -506,7 +506,7 @@
             <key type="filename">objects/4x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.679181,0.392713</point_f>
+                <point_f>0.662116,0.396761</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -521,7 +521,7 @@
             <key type="filename">objects/5x3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.389744,0.492386</point_f>
+                <point_f>0.374359,0.497462</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -536,7 +536,7 @@
             <key type="filename">objects/6x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.262887,0.515152</point_f>
+                <point_f>0.262887,0.494949</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -551,7 +551,7 @@
             <key type="filename">objects/6x3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.342466,0.495192</point_f>
+                <point_f>0.342466,0.471154</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -566,7 +566,7 @@
             <key type="filename">objects/6x4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.397541,0.436364</point_f>
+                <point_f>0.401639,0.445455</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -581,7 +581,7 @@
             <key type="filename">objects/6x6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.498282,0.4</point_f>
+                <point_f>0.501718,0.4</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -596,7 +596,7 @@
             <key type="filename">objects/6x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.564327,0.36803</point_f>
+                <point_f>0.564327,0.364312</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -611,7 +611,7 @@
             <key type="filename">objects/7x4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.368421,0.424893</point_f>
+                <point_f>0.360902,0.420601</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -626,7 +626,7 @@
             <key type="filename">objects/8x2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.209016,0.436364</point_f>
+                <point_f>0.209016,0.445455</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -641,7 +641,7 @@
             <key type="filename">objects/8x24.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.747736,0.202062</point_f>
+                <point_f>0.750323,0.202062</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -671,7 +671,7 @@
             <key type="filename">objects/8x4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.34471,0.408907</point_f>
+                <point_f>0.337884,0.396761</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -686,7 +686,7 @@
             <key type="filename">objects/8x6.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.438596,0.36803</point_f>
+                <point_f>0.435673,0.364312</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -701,7 +701,7 @@
             <key type="filename">objects/8x8.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.498708,0.329932</point_f>
+                <point_f>0.501292,0.333333</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
