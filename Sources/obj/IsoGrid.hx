@@ -104,7 +104,7 @@ class IsoGrid {
 				if (visited.exists(neighbor.id))
 					continue;
 
-				if (neighbor.isOccupied)
+				if (neighbor.isOccupied || neighbor.state.has(CellState.Locked))
 					queue2.add(neighbor);
 				else {
 					visited.set(neighbor.id, true);
