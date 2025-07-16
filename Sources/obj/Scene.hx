@@ -1,9 +1,9 @@
 package obj;
 
+import kha.Image;
+import kha.math.Vector2i;
 import kha.math.FastVector2;
 import graphics.mesh.MeshRaycast;
-import kha.Image;
-import kha.FastFloat;
 import core.AABB;
 import core.SpatialGrid;
 import core.Camera;
@@ -22,18 +22,20 @@ class Scene {
 
 	public var camera:Camera;
 	public var grid:IsoGrid;
+	public var visibilitySourcePosition:Vector2i;
 
 	public var spatialGrid:SpatialGrid<SceneObject>;
 
 	var heightDepthOffset:Int;
 	var raycastBuffer:Array<SceneObject> = new Array<SceneObject>();
 
-	public function new(grid:IsoGrid) {
+	public function new(grid:IsoGrid, visibilitySource:Vector2i) {
 		this.grid = grid;
 		spatialGrid = new SpatialGrid(100);
 		objects = [];
 		pointObjects = [];
 		heightDepthOffset = grid.size.x * grid.size.y * 2;
+		visibilitySourcePosition = visibilitySource;
 	}
 
 	public inline function getNextObjId():Int
@@ -78,12 +80,15 @@ class Scene {
 
 	public function update():Void {
 		if (grid.sortManager.isDirty) {
+			grid.propagateVisibility(grid.getCellByCoords(visibilitySourcePosition.x, visibilitySourcePosition.y));
 			grid.depthMap.fill(grid.sortManager.getSorted());
 			for (obj in objects) {
 				final pos = obj.gridPosition;
 				final x:Int = Std.int(pos.x);
 				final y:Int = Std.int(pos.y);
+				final cell = grid.getCellByPosition(pos);
 				obj.depth = grid.depthMap.getDepth(x, y);
+				obj.applyVisibilityState(cell.state);
 			}
 		}
 
@@ -93,8 +98,10 @@ class Scene {
 			final y:Int = Std.int(pos.y);
 			final depth:Int = grid.depthMap.getDepth(x, y);
 			final altitude:Int = 1 - (depth & 1);
+			final cell = grid.getCellByPosition(pos);
 			obj.altitude = altitude;
 			obj.depth = depth + heightDepthOffset * altitude;
+			obj.applyVisibilityState(cell.state);
 			spatialGrid.update(obj);
 		}
 	}
@@ -108,9 +115,11 @@ class Scene {
 		raycastBuffer.resize(0);
 		spatialGrid.queryPoint(point.x, point.y, raycastBuffer);
 		raycastBuffer.sort(depthSortRevert);
-		for (obj in raycastBuffer)
-			if (MeshRaycast.hitTestWorld(point, obj.position, obj.mesh, tex))
+		for (obj in raycastBuffer) {
+			final cell = grid.getCellByPosition(obj.gridPosition);
+			if (cell.state.has(CellState.Visible) && MeshRaycast.hitTestWorld(point, obj.position, obj.mesh, tex))
 				return obj;
+		}
 		return null;
 	}
 

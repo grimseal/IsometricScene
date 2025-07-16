@@ -17,7 +17,7 @@ class SceneLoader {
 		var sceneData = parse(data);
 		var size = new Vector2i(sceneData.width, sceneData.height);
 		var grid = new IsoGrid(size);
-		var scene = new Scene(grid);
+		var scene = new Scene(grid, new Vector2i(sceneData.visibility_source.x, sceneData.visibility_source.y));
 
 		for (object in sceneData.objects) {
 			var mesh = MeshStorage.getByName('${object.w}x${object.h}');
@@ -40,6 +40,12 @@ typedef SceneData = {
 	var width:Int;
 	var height:Int;
 	var objects:Array<{
+		x:Int,
+		y:Int,
+		w:Int,
+		h:Int
+	}>;
+	var lock_zones:Array<{
 		x:Int,
 		y:Int,
 		w:Int,

@@ -20,7 +20,7 @@ class Simulation {
 		Time.init();
 		core.System.load();
 		core.System.init();
-		Scheduler.addTimeTask(step, 0, Settings.simulationFramerate);
+		Scheduler.addTimeTask(step, 0, Settings.SIMULAION_FRAMERATE);
 		System.notifyOnFrames(render);
 	}
 

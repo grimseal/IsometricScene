@@ -1,10 +1,10 @@
 package system;
 
+import kha.FastFloat;
 import kha.graphics2.Graphics;
 import kha.Color;
 import kha.Font;
 import kha.Assets;
-import kha.Framebuffer;
 import core.Time;
 import core.System.IRenderSystem;
 import graphics.RenderPassData;
@@ -13,7 +13,12 @@ using ext.FloatExt;
 using ext.ArrayExt;
 
 class DrawFpsSystem implements IRenderSystem {
-	static var font:Font;
+	static inline final FPS_TIME_FRAME:FastFloat = .05;
+
+	var font:Font;
+	var frameCount:Int = 0;
+	var fps:Int = 0;
+	var timer:FastFloat = 0;
 
 	public function new() {}
 
@@ -22,15 +27,31 @@ class DrawFpsSystem implements IRenderSystem {
 	};
 
 	public function render(data:RenderPassData) {
+		fpsUpdate();
+		draw(data, fps);
+	}
+
+	inline function fpsUpdate() {
+		frameCount++;
+		timer += Time.unscaledDeltaTime;
+
+		if (timer >= FPS_TIME_FRAME) {
+			fps = Std.int((frameCount / timer).round());
+			frameCount = 0;
+			timer = 0.0;
+		}
+	}
+
+	inline function draw(data:RenderPassData, fps:Int) {
 		final g = data.framebuffer.g2;
 		g.begin(false);
 		g.font = font;
 		g.fontSize = 32;
-		drawStringWithShadow(g, Std.string((1 / Time.unscaledDeltaTime).round()), 0, 0, font, 32, Color.Orange);
+		drawStringWithShadow(g, Std.string(fps), 0, 0, font, 32, Color.Orange);
 		g.end();
 	}
 
-	public function drawStringWithShadow(g:Graphics, str:String, x:Float, y:Float, font:Font, fontSize:Int, color:Color = kha.Color.White,
+	inline function drawStringWithShadow(g:Graphics, str:String, x:Float, y:Float, font:Font, fontSize:Int, color:Color = kha.Color.White,
 			shadow:Color = kha.Color.Black) {
 		g.color = shadow;
 		g.drawString(str, x + 2, y + 2);

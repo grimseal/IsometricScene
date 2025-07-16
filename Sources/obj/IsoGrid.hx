@@ -1,25 +1,35 @@
 package obj;
 
+import kha.math.Vector2i;
 import obj.Cell;
 import obj.Coords;
-import kha.math.Vector2i;
+import obj.visibility.VisibilityConstants;
 
 class IsoGrid {
-	public var size(default, null):Vector2i;
-	public var sortManager:IsoSortManager;
-	public var depthMap:IsoDepthMap;
+	static final visibilityRules = VisibilityConstants.rules;
+	static final directions = VisibilityConstants.cardinalDirs;
 
-	var cells(default, null):Array<Cell>;
+	public final size:Vector2i;
+	public final sortManager:IsoSortManager;
+	public final depthMap:IsoDepthMap;
+
+	final cells:Array<Cell>;
+	final visited:Map<Int, Bool>;
+	final queue:List<Cell>;
+	final queue2:List<Cell>;
 
 	public function new(size:Vector2i) {
 		this.size = size;
 		depthMap = new IsoDepthMap(size.x, size.y);
 		sortManager = new IsoSortManager();
 		cells = new Array<Cell>();
+		visited = new Map<Int, Bool>();
+		queue = new List<Cell>();
+		queue2 = new List<Cell>();
 		var index = 0;
 		for (y in 0...size.y)
 			for (x in 0...size.x)
-				cells.push(new Cell(index++, new GridPos(x, y)));
+				cells.push(new Cell(index++, new Vector2i(x, y)));
 	}
 
 	public inline function setCellsContent(obj:SceneObject):Void
@@ -49,12 +59,74 @@ class IsoGrid {
 	public function getCellByPosition(position:GridPos):Cell {
 		if (position.x < 0 || position.x >= size.x || position.y < 0 || position.y >= size.y)
 			return null;
-		return cells[Std.int(position.y * size.x + position.x)];
+		return cells[Std.int(position.y) * size.x + Std.int(position.x)];
 	}
 
 	public function getCellByCoords(x:Int, y:Int):Cell {
 		if (x < 0 || x >= size.x || y < 0 || y >= size.y)
 			return null;
 		return cells[y * size.x + x];
+	}
+
+	public function propagateVisibility(source:Cell):Void {
+		for (cell in cells)
+			cell.state = cell.state.remove(CellState.Visible).remove(CellState.Semivisible).add(CellState.Invisible);
+		source.state = source.state.remove(CellState.Invisible).add(CellState.Visible);
+
+		queue.add(source);
+		visited.set(source.id, true);
+
+		// reveal empty visible cells
+		while (!queue.isEmpty()) {
+			final current = queue.pop();
+			current.state = current.state.remove(CellState.Invisible).add(CellState.Visible);
+
+			for (dir in directions) {
+				final nx = current.position.x + dir.x;
+				final ny = current.position.y + dir.y;
+				if (!contains(nx, ny))
+					continue;
+
+				final neighbor = getCellByCoords(nx, ny);
+				if (visited.exists(neighbor.id))
+					continue;
+
+				if (neighbor.isOccupied)
+					queue2.add(neighbor);
+				else {
+					visited.set(neighbor.id, true);
+					queue.add(neighbor);
+				}
+			}
+		}
+
+		// apply neighbouring rules to the rest
+		while (!queue2.isEmpty()) {
+			final current = queue2.pop();
+
+			for (dir in directions) {
+				final nx = current.position.x + dir.x;
+				final ny = current.position.y + dir.y;
+
+				if (!contains(nx, ny))
+					continue;
+
+				final neighbor = getCellByCoords(nx, ny);
+				if (visited.exists(neighbor.id))
+					continue;
+
+				for (rule in visibilityRules) {
+					if (rule.apply(neighbor, this)) {
+						queue2.add(neighbor);
+						visited.set(neighbor.id, true);
+						break;
+					}
+				}
+			}
+		}
+
+		visited.clear();
+		queue.clear();
+		queue2.clear();
 	}
 }

@@ -1,5 +1,7 @@
 package obj;
 
+import obj.Cell.CellState;
+import kha.audio2.ogg.vorbis.data.Setting;
 import kha.math.FastVector2;
 import kha.Color;
 import kha.math.Vector2i;
@@ -40,7 +42,7 @@ class SceneObject extends Entity {
 	function set_altitude(val:Int):Int {
 		if (_altitude == val)
 			return _altitude;
-		final newAabbHeightOffset = val * -96;
+		final newAabbHeightOffset = val * -Settings.CELL_ALTITUDE;
 		final offsetDiff = newAabbHeightOffset - aabbHeightOffset;
 		aabb.translate(0, offsetDiff);
 		aabbHeightOffset = newAabbHeightOffset;
@@ -62,8 +64,6 @@ class SceneObject extends Entity {
 		_altitude = 0;
 		aabbHeightOffset = 0;
 	}
-
-	public inline function update():Void {}
 
 	inline function get_worldPosition():WorldPos
 		return _worldPosition;
@@ -88,4 +88,24 @@ class SceneObject extends Entity {
 
 	public function getAABB():AABB
 		return aabb;
+
+	public function applyVisibilityState(state:CellState) {
+		color = switch (state) {
+			case CellState.Invisible: Settings.INVISIBLE_COLOR;
+			case CellState.Semivisible: Settings.SEMIVISIBLE_COLOR;
+			case CellState.Blocked: Settings.BLOCKED_COLOR;
+			default: Settings.VISIBLE_COLOR;
+		}
+	}
+
+	var prevCell:Cell;
+	var prevState:CellState;
+
+	public function test(cell:Cell) {
+		if (prevState == cell.state)
+			return;
+		applyVisibilityState(cell.state);
+		prevCell = cell;
+		prevState = cell.state;
+	}
 }

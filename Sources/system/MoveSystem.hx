@@ -1,5 +1,6 @@
 package system;
 
+import kha.audio2.ogg.vorbis.data.Setting;
 import core.Time;
 import kha.FastFloat;
 import kha.math.FastVector2;
@@ -15,7 +16,9 @@ using ext.FastVector2Ext;
 class MoveSystem implements ISystem {
 	static inline final MIN_TRAVEL_DISTANCE:Int = 50;
 	static inline final MAX_TRAVEL_DISTANCE:Int = 200;
-	static inline final MAX_MOVING_COUNT:Int = 20;
+	static inline final MAX_MOVING_COUNT:Int = Settings.MAX_MOVING_OBJECT_COUNT;
+	static inline final MIN_MOVING_DURATION:FastFloat = Settings.MIN_MOVING_DURATION;
+	static inline final MAX_MOVING_DURATION:FastFloat = Settings.MAX_MOVING_DURATION;
 
 	var movingObjects:Array<Move> = [];
 	var movingCounters:Map<Int, Int> = new haxe.ds.Map<Int, Int>();
@@ -45,7 +48,8 @@ class MoveSystem implements ISystem {
 
 		for (i in 0...range) {
 			var obj = candidates[i];
-			movingObjects.push(new Move(obj, obj.gridPosition, getRandomTarget(obj.gridPosition, width, height), random.GetFloatIn(2, 10)));
+			movingObjects.push(new Move(obj, obj.gridPosition, getRandomTarget(obj.gridPosition, width, height),
+				random.GetFloatIn(MIN_MOVING_DURATION, MAX_MOVING_DURATION)));
 			movingCounters[obj.id]++;
 		}
 
@@ -58,7 +62,7 @@ class MoveSystem implements ISystem {
 	}
 
 	inline function getRandomTarget(origin:FastVector2, width:FastFloat, height:FastFloat):FastVector2 {
-		return random.getCircleVectorIn(MIN_TRAVEL_DISTANCE, MAX_TRAVEL_DISTANCE).add(origin).clampXY(0, width, 0, height);
+		return random.getCircleVectorIn(MIN_TRAVEL_DISTANCE, MAX_TRAVEL_DISTANCE).add(origin).clampXY(0, width - 1, 0, height - 1);
 	}
 
 	inline function getMovingCount(id:Int) {
