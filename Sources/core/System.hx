@@ -49,13 +49,8 @@ class System {
 		passData.framebuffer = framebuffer;
 		passData.camera = Scene.current.camera;
 		passData.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
-		final queryAABB = passData.camera.getViewportAABB();
-		Scene.current.spatialGrid.query(queryAABB, passData.objects);
-		passData.objects.sort(depthSort);
+		Scene.current.raycastAABB(passData.camera.getViewportAABB(), passData.objects);
 	}
-
-	static inline function depthSort(a:SceneObject, b:SceneObject):Int
-		return a.depth != b.depth ? a.depth - b.depth : a.position.y < b.position.y ? -1 : 1;
 
 	static inline function clearPassData()
 		passData.clear();

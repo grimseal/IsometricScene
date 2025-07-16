@@ -4,6 +4,10 @@ import kha.FastFloat;
 import kha.math.FastVector2;
 
 class FastVector2Ext {
+	public static inline function getLengthSq(v:FastVector2):FastFloat {
+		return v.x * v.x + v.y * v.y;
+	}
+
 	public static inline function lerp(a:FastVector2, b:FastVector2, t:FastFloat):FastVector2 {
 		return new FastVector2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
 	}

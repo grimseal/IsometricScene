@@ -10,10 +10,13 @@ import kha.input.Mouse;
 
 class CameraControlSystem implements ISystem {
 	static inline final CAMERA_ZOOM_SPEED:FastFloat = 0.25;
+	static inline final CAMERA_MOVE_THRESHOLD:FastFloat = 2;
+	static inline final CAMERA_MOVE_THRESHOLD_SQ:FastFloat = CAMERA_MOVE_THRESHOLD * CAMERA_MOVE_THRESHOLD;
 
 	var cameraOrigin:FastVector2 = new FastVector2();
 	var origin:Vector2i = new Vector2i();
 	var position:Vector2i = new Vector2i();
+	var isPressed:Bool;
 	var isDragging:Bool;
 	var mouse:Mouse;
 
@@ -51,7 +54,9 @@ class CameraControlSystem implements ISystem {
 	}
 
 	function onMouseDown(button:Int, x:Int, y:Int):Void {
-		isDragging = true;
+		if (button != 0)
+			return;
+		isPressed = true;
 		cameraOrigin = Scene.current.camera.position;
 		position.x = x;
 		position.y = y;
@@ -60,17 +65,30 @@ class CameraControlSystem implements ISystem {
 	}
 
 	function onMouseUp(button:Int, x:Int, y:Int):Void {
+		if (button != 0)
+			return;
+		isPressed = false;
 		isDragging = false;
 		position.x = x;
 		position.y = y;
 	}
 
 	function onMouseMove(x:Int, y:Int, xDelta:Int, yDelta:Int):Void {
+		if (isPressed && !isDragging && getLengthSq(origin, x, y) >= CAMERA_MOVE_THRESHOLD_SQ)
+			isDragging = true;
+		if (!isDragging)
+			return;
 		position.x = x;
 		position.y = y;
 	}
 
 	function onMouseWheel(delta:Int) {
 		Scene.current.camera.zoom += CAMERA_ZOOM_SPEED * delta;
+	}
+
+	function getLengthSq(v:Vector2i, x:Int, y:Int):FastFloat {
+		var dx:FastFloat = v.x - x;
+		var dy:FastFloat = v.y - y;
+		return dx * dx + dy * dy;
 	}
 }

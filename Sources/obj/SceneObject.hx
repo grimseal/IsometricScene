@@ -23,7 +23,7 @@ class SceneObject extends Entity {
 	public var altitude(get, set):Int;
 
 	public var mesh(default, null):Mesh;
-	public var color(default, null):Color;
+	public var color(default, default):Color;
 
 	public var depth:Int;
 

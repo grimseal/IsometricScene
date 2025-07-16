@@ -1,10 +1,16 @@
 package obj;
 
 import kha.math.FastVector2;
+import graphics.mesh.MeshRaycast;
+import kha.Image;
+import kha.FastFloat;
+import core.AABB;
 import core.SpatialGrid;
 import core.Camera;
 import obj.SceneObject;
 import obj.Cell;
+
+using ext.ArrayExt;
 
 class Scene {
 	public static var current:Scene;
@@ -20,6 +26,7 @@ class Scene {
 	public var spatialGrid:SpatialGrid<SceneObject>;
 
 	var heightDepthOffset:Int;
+	var raycastBuffer:Array<SceneObject> = new Array<SceneObject>();
 
 	public function new(grid:IsoGrid) {
 		this.grid = grid;
@@ -64,15 +71,9 @@ class Scene {
 		if (!objects.remove(obj))
 			return;
 
+		grid.clearCellsContent(obj);
 		grid.sortManager.removeObject(obj.isoAABB);
 		spatialGrid.remove(obj);
-		if (obj.type == SceneObjectType.NONBLOCKING)
-			return;
-		var cell:Cell = grid.getCellByPosition(obj.position);
-		if (cell == null)
-			throw 'cell not found ${obj.gridPosition}';
-		if (cell.content == obj)
-			cell.content = null;
 	}
 
 	public function update():Void {
@@ -97,4 +98,25 @@ class Scene {
 			spatialGrid.update(obj);
 		}
 	}
+
+	public function raycastAABB(aabb:AABB, result:Array<SceneObject>):Void {
+		spatialGrid.query(aabb, result);
+		result.sort(depthSort);
+	}
+
+	public function raycast(point:FastVector2, tex:Image):SceneObject {
+		raycastBuffer.resize(0);
+		spatialGrid.queryPoint(point.x, point.y, raycastBuffer);
+		raycastBuffer.sort(depthSortRevert);
+		for (obj in raycastBuffer)
+			if (MeshRaycast.hitTestWorld(point, obj.position, obj.mesh, tex))
+				return obj;
+		return null;
+	}
+
+	static inline function depthSort(a:SceneObject, b:SceneObject):Int
+		return a.depth != b.depth ? a.depth - b.depth : a.position.y < b.position.y ? -1 : 1;
+
+	static inline function depthSortRevert(a:SceneObject, b:SceneObject):Int
+		return b.depth != a.depth ? b.depth - a.depth : b.position.y < a.position.y ? -1 : 1;
 }

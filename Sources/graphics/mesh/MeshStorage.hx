@@ -7,6 +7,7 @@ import kha.arrays.Float32Array;
 import graphics.mesh.Mesh;
 import utils.ArrayUtil;
 
+@:allow(graphics.mesh.MeshRaycast)
 class MeshStorage {
 	// TODO create collections over arrays
 	static inline final ARRAY_SIZE:Int = 65536;

@@ -17,26 +17,23 @@ class IsoGrid {
 		sortManager = new IsoSortManager();
 		cells = new Array<Cell>();
 		var index = 0;
-		for (y in 0...size.y) {
-			for (x in 0...size.x) {
-				var cell = new Cell(index, new GridPos(x, y));
-				cells.push(cell);
-				index++;
-			}
-		}
+		for (y in 0...size.y)
+			for (x in 0...size.x)
+				cells.push(new Cell(index++, new GridPos(x, y)));
 	}
 
-	public function setCellsContent(obj:SceneObject):Void {
-		final rect = obj.isoAABB;
-		final x = rect.xMax;
-		final y = rect.yMin;
-		final x = rect.xMax;
-		final y = rect.yMin;
+	public inline function setCellsContent(obj:SceneObject):Void
+		setCellsContentInternal(obj, obj);
 
+	public inline function clearCellsContent(obj:SceneObject):Void
+		setCellsContentInternal(obj, null);
+
+	function setCellsContentInternal(obj:SceneObject, content:SceneObject):Void {
+		final rect = obj.isoAABB;
 		for (y in rect.yMin...rect.yMax)
 			for (x in rect.xMin...rect.xMax)
 				if (contains(x, y))
-					getCellByCoords(x, y).content = obj;
+					getCellByCoords(x, y).content = content;
 	}
 
 	public function contains(x:Int, y:Int):Bool {

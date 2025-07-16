@@ -92,6 +92,29 @@ class SpatialGrid<T:GridObject> {
 		return result;
 	}
 
+	public function queryPoint(x:FastFloat, y:FastFloat, result:Array<T>):Array<T> {
+		visitedBuffer.clear();
+
+		var cell = toCell(x, y);
+		var key = cellKey(cell.cx, cell.cy);
+
+		if (!grid.exists(key))
+			return result;
+
+		for (obj in grid.get(key)) {
+			if (visitedBuffer.contains(obj.id))
+				continue;
+
+			var aabb = obj.getAABB();
+			if (x >= aabb.minX && x <= aabb.maxX && y >= aabb.minY && y <= aabb.maxY) {
+				result.push(obj);
+				visitedBuffer.add(obj.id);
+			}
+		}
+
+		return result;
+	}
+
 	public function clear():Void {
 		for (bucket in grid)
 			bucket.resize(0);
