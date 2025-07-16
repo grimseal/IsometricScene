@@ -1,5 +1,6 @@
 package core;
 
+import obj.SceneObject;
 import kha.Framebuffer;
 import graphics.RenderPassData;
 import obj.Scene;
@@ -34,6 +35,7 @@ class System {
 	public static function update() {
 		for (system in SimulationSystems.simulationSystems)
 			system.update();
+		Scene.current.update();
 	}
 
 	public static function render(framebuffer:Framebuffer) {
@@ -49,7 +51,11 @@ class System {
 		passData.camera.updateProjectionMatrix(framebuffer.width, framebuffer.height);
 		final queryAABB = passData.camera.getViewportAABB();
 		Scene.current.spatialGrid.query(queryAABB, passData.objects);
+		passData.objects.sort(depthSort);
 	}
+
+	static inline function depthSort(a:SceneObject, b:SceneObject):Int
+		return a.depth != b.depth ? a.depth - b.depth : a.position.y < b.position.y ? -1 : 1;
 
 	static inline function clearPassData()
 		passData.clear();

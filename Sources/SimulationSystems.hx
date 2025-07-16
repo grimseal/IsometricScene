@@ -8,6 +8,7 @@ class SimulationSystems {
 		new DrawIsoGridSystem(),
 		new ObjectsRenderSystem(),
 		// new AABBDebugSystem(),
+		// new DepthDebugSystem(),
 		new DrawFpsSystem()
 	];
 }

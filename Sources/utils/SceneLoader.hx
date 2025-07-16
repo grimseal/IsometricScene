@@ -16,12 +16,12 @@ class SceneLoader {
 	public function load(data:Blob):Scene {
 		var sceneData = parse(data);
 		var size = new Vector2i(sceneData.width, sceneData.height);
-		var grid = new Grid(size);
+		var grid = new IsoGrid(size);
 		var scene = new Scene(grid);
 
 		for (object in sceneData.objects) {
 			var mesh = MeshStorage.getByName('${object.w}x${object.h}');
-			var sceneObject = new SceneObject(scene.objects.length, new Vector2i(object.w, object.h), new FastVector2(object.x, object.y), mesh, Color.White);
+			var sceneObject = new SceneObject(scene.getNextObjId(), new Vector2i(object.w, object.h), new FastVector2(object.x, object.y), mesh, Color.White);
 			scene.addObj(sceneObject);
 		}
 
