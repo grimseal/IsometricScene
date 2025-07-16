@@ -11,8 +11,8 @@ class Scene {
 
 	var objectIdSeq:Int = -1;
 
-	var objects(default, null):Array<SceneObject>;
-	var pointObjects(default, null):Array<SceneObject>;
+	public var objects(default, null):Array<SceneObject>;
+	public var pointObjects(default, null):Array<SceneObject>;
 
 	public var camera:Camera;
 	public var grid:IsoGrid;

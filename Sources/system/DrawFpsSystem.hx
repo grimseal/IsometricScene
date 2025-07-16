@@ -26,7 +26,7 @@ class DrawFpsSystem implements IRenderSystem {
 		g.begin(false);
 		g.font = font;
 		g.fontSize = 32;
-		drawStringWithShadow(g, Std.string((1 / Time.deltaTime).round()), 0, 0, font, 32, Color.Orange);
+		drawStringWithShadow(g, Std.string((1 / Time.unscaledDeltaTime).round()), 0, 0, font, 32, Color.Orange);
 		g.end();
 	}
 
