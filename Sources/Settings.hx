@@ -8,8 +8,6 @@ class Settings {
 	public static final APP_NAME:String = "IsometricScene";
 	public static final SIMULAION_FRAMERATE:FastFloat = 1 / 60;
 
-	public static final SCREEN_WIDTH:Int = 800;
-	public static final SCREEN_HEIGHT:Int = 600;
 	public static final CAMERA_ZOOM:FastFloat = 1.0;
 
 	public static inline final MAX_MOVING_OBJECT_COUNT:Int = 20;
