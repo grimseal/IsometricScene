@@ -1,5 +1,6 @@
 package obj;
 
+import kha.math.FastVector2;
 import core.SpatialGrid;
 import core.Camera;
 import obj.SceneObject;
@@ -93,6 +94,7 @@ class Scene {
 			final altitude:Int = 1 - (depth & 1);
 			obj.altitude = altitude;
 			obj.depth = depth + heightDepthOffset * altitude;
+			spatialGrid.update(obj);
 		}
 	}
 }

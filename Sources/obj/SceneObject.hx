@@ -72,6 +72,9 @@ class SceneObject extends Entity {
 		_position.x = value.x;
 		_position.y = value.y + aabbHeightOffset;
 		_worldPosition.setFrom(value);
+		var meshAabb = mesh.getAABB();
+		meshAabb.translate(_worldPosition.x, worldPosition.y + aabbHeightOffset);
+		this.aabb = meshAabb;
 		return _worldPosition;
 	}
 
