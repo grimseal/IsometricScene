@@ -57,7 +57,6 @@ class IsoSortManager {
 		graph.remove(obj);
 		indegree.remove(obj);
 		nodes.remove(obj);
-		dirty = true;
 	}
 
 	public function getSorted():Array<IsoAABB> {

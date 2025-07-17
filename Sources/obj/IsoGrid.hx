@@ -19,6 +19,13 @@ class IsoGrid {
 	final queue:List<Cell>;
 	final queue2:List<Cell>;
 
+	var dirty:Bool;
+
+	public var isDirty(get, never):Bool;
+
+	inline function get_isDirty():Bool
+		return dirty;
+
 	public function new(size:Vector2i, locked:Array<IsoAABB>) {
 		this.size = size;
 		this.depthMap = new IsoDepthMap(size.x, size.y);
@@ -28,6 +35,7 @@ class IsoGrid {
 		this.visited = new Map<Int, Bool>();
 		this.queue = new List<Cell>();
 		this.queue2 = new List<Cell>();
+		this.dirty = true;
 		var index = 0;
 		for (y in 0...size.y)
 			for (x in 0...size.x)
@@ -39,8 +47,10 @@ class IsoGrid {
 	public inline function setCellsContent(obj:SceneObject):Void
 		setCellsContentInternal(obj, obj);
 
-	public inline function clearCellsContent(obj:SceneObject):Void
+	public inline function clearCellsContent(obj:SceneObject):Void {
 		setCellsContentInternal(obj, null);
+		depthMap.fillValue(obj.isoAABB, obj.depth - 1);
+	}
 
 	function setCellsContentInternal(obj:SceneObject, content:SceneObject):Void {
 		final rect = obj.isoAABB;
@@ -48,6 +58,7 @@ class IsoGrid {
 			for (x in rect.xMin...rect.xMax)
 				if (contains(x, y))
 					getCellByCoords(x, y).content = content;
+		dirty = true;
 	}
 
 	function setCellsLocked(rect:IsoAABB):Void {
@@ -81,7 +92,12 @@ class IsoGrid {
 		return cells[y * size.x + x];
 	}
 
-	public function propagateVisibility(source:Cell):Void {
+	public function propagateVisibility(sourcePosition:Vector2i):Bool {
+		if (!dirty)
+			return false;
+
+		final source = getCellByCoords(sourcePosition.x, sourcePosition.y);
+
 		for (cell in cells)
 			cell.state = cell.state.remove(CellState.Visible).remove(CellState.Semivisible).add(CellState.Invisible);
 		source.state = source.state.remove(CellState.Invisible).add(CellState.Visible);
@@ -141,5 +157,8 @@ class IsoGrid {
 		visited.clear();
 		queue.clear();
 		queue2.clear();
+
+		dirty = false;
+		return true;
 	}
 }

@@ -43,6 +43,12 @@ class IsoDepthMap {
 		fillBorder();
 	}
 
+	public function fillValue(rect:IsoAABB, val:Int):Void {
+		for (y in rect.yMin...rect.yMax)
+			for (x in rect.xMin...rect.xMax)
+				map[idx(x, y)] = val;
+	}
+
 	inline function fillUntil(originX:Int, originY:Int):Void {
 		var val = map[idx(originX, originY)];
 		if (val == EMPTY)

@@ -79,9 +79,11 @@ class Scene {
 	}
 
 	public function update():Void {
-		if (grid.sortManager.isDirty) {
-			grid.propagateVisibility(grid.getCellByCoords(visibilitySourcePosition.x, visibilitySourcePosition.y));
+		var requrieUpdate = grid.sortManager.isDirty;
+		if (grid.sortManager.isDirty)
 			grid.depthMap.fill(grid.sortManager.getSorted());
+		requrieUpdate = grid.propagateVisibility(visibilitySourcePosition) || requrieUpdate;
+		if (requrieUpdate)
 			for (obj in objects) {
 				final pos = obj.gridPosition;
 				final x:Int = Std.int(pos.x);
@@ -90,7 +92,6 @@ class Scene {
 				obj.depth = grid.depthMap.getDepth(x, y);
 				obj.applyVisibilityState(cell.state);
 			}
-		}
 
 		for (obj in pointObjects) {
 			final pos = obj.gridPosition;
