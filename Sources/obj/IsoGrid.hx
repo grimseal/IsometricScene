@@ -95,6 +95,8 @@ class IsoGrid {
 		return cells[y * size.x + x];
 	}
 
+	private inline static final CELL_SETTED_STATE_MASK:CellState = CellState.Invisible | CellState.Locked;
+
 	public function propagateVisibility(sourcePosition:Vector2i):Bool {
 		if (!dirty)
 			return false;
@@ -125,7 +127,7 @@ class IsoGrid {
 
 				visited.set(neighbor.id, true);
 
-				if (neighbor.isOccupied)
+				if (neighbor.isOccupied || neighbor.state.has(CellState.Locked))
 					queueNext.push(neighbor);
 				else
 					queue.add(neighbor);
@@ -143,6 +145,13 @@ class IsoGrid {
 		while (!queue.isEmpty()) {
 			final current = queue.pop();
 
+			for (rule in visibilityRules)
+				if (rule.apply(current, this))
+					break;
+
+			if (current.state.has(CELL_SETTED_STATE_MASK))
+				continue;
+
 			for (dir in directions) {
 				final nx = current.position.x + dir.x;
 				final ny = current.position.y + dir.y;
@@ -156,10 +165,6 @@ class IsoGrid {
 				visited.set(neighbor.id, true);
 				queue.add(neighbor);
 			}
-
-			for (rule in visibilityRules)
-				if (rule.apply(current, this))
-					break;
 
 			if (current.isOccupied) {
 				final rect = current.content.isoAABB;
