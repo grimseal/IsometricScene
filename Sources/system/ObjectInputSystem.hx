@@ -1,5 +1,6 @@
 package system;
 
+import obj.Cell;
 import kha.Color;
 import kha.Assets;
 import kha.Image;
@@ -40,7 +41,8 @@ class ObjectInputSystem implements ISystem {
 		if (obj == null)
 			return;
 
-		Scene.current.removeObj(obj);
+		if (Scene.current.grid.getCellByPosition(obj.gridPosition).state.has(CellState.Visible))
+			Scene.current.removeObj(obj);
 	}
 
 	public function update() {

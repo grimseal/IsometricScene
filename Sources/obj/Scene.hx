@@ -116,11 +116,9 @@ class Scene {
 		raycastBuffer.resize(0);
 		spatialGrid.queryPoint(point.x, point.y, raycastBuffer);
 		raycastBuffer.sort(depthSortRevert);
-		for (obj in raycastBuffer) {
-			final cell = grid.getCellByPosition(obj.gridPosition);
-			if (cell.state.has(CellState.Visible) && MeshRaycast.hitTestWorld(point, obj.position, obj.mesh, tex))
+		for (obj in raycastBuffer)
+			if (MeshRaycast.hitTestWorld(point, obj.position, obj.mesh, tex))
 				return obj;
-		}
 		return null;
 	}
 
