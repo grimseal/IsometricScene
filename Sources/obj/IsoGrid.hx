@@ -1,5 +1,6 @@
 package obj;
 
+import obj.visibility.IVisibilityRule;
 import kha.math.Vector2i;
 import obj.Cell;
 import obj.Coords;
@@ -15,9 +16,10 @@ class IsoGrid {
 	public final locked:Array<IsoAABB>;
 
 	final cells:Array<Cell>;
-	final visited:Map<Int, Bool>;
-	final queue:List<Cell>;
-	final queue2:List<Cell>;
+	var visited:Map<Int, Bool>;
+	var visitedNext:Map<Int, Bool>;
+	var queue:List<Cell>;
+	var queueNext:List<Cell>;
 
 	var dirty:Bool;
 
@@ -33,8 +35,9 @@ class IsoGrid {
 		this.cells = new Array<Cell>();
 		this.locked = locked;
 		this.visited = new Map<Int, Bool>();
+		this.visitedNext = new Map<Int, Bool>();
 		this.queue = new List<Cell>();
-		this.queue2 = new List<Cell>();
+		this.queueNext = new List<Cell>();
 		this.dirty = true;
 		var index = 0;
 		for (y in 0...size.y)
@@ -105,10 +108,10 @@ class IsoGrid {
 		queue.add(source);
 		visited.set(source.id, true);
 
-		// reveal empty visible cells
 		while (!queue.isEmpty()) {
 			final current = queue.pop();
 			current.state = current.state.remove(CellState.Invisible).add(CellState.Visible);
+			visitedNext.set(current.id, true);
 
 			for (dir in directions) {
 				final nx = current.position.x + dir.x;
@@ -120,18 +123,25 @@ class IsoGrid {
 				if (visited.exists(neighbor.id))
 					continue;
 
-				if (neighbor.isOccupied || neighbor.state.has(CellState.Locked))
-					queue2.add(neighbor);
-				else {
-					visited.set(neighbor.id, true);
+				visited.set(neighbor.id, true);
+
+				if (neighbor.isOccupied)
+					queueNext.push(neighbor);
+				else
 					queue.add(neighbor);
-				}
 			}
 		}
 
-		// apply neighbouring rules to the rest
-		while (!queue2.isEmpty()) {
-			final current = queue2.pop();
+		final t = this.queueNext;
+		this.queueNext = queue;
+		this.queue = t;
+
+		final t2 = this.visitedNext;
+		this.visitedNext = visited;
+		this.visited = t2;
+
+		while (!queue.isEmpty()) {
+			final current = queue.pop();
 
 			for (dir in directions) {
 				final nx = current.position.x + dir.x;
@@ -143,20 +153,32 @@ class IsoGrid {
 				final neighbor = getCellByCoords(nx, ny);
 				if (visited.exists(neighbor.id))
 					continue;
+				visited.set(neighbor.id, true);
+				queue.add(neighbor);
+			}
 
-				for (rule in visibilityRules) {
-					if (rule.apply(neighbor, this)) {
-						queue2.add(neighbor);
-						visited.set(neighbor.id, true);
-						break;
+			for (rule in visibilityRules)
+				if (rule.apply(current, this))
+					break;
+
+			if (current.isOccupied) {
+				final rect = current.content.isoAABB;
+				for (y in rect.yMin...rect.yMax)
+					for (x in rect.xMin...rect.xMax) {
+						final sibling = getCellByCoords(x, y);
+						if (visited.exists(sibling.id))
+							continue;
+						sibling.state = current.state;
+						visited.set(sibling.id, true);
+						queue.add(sibling);
 					}
-				}
 			}
 		}
 
 		visited.clear();
+		visitedNext.clear();
 		queue.clear();
-		queue2.clear();
+		queueNext.clear();
 
 		dirty = false;
 		return true;
